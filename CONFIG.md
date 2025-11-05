@@ -1,6 +1,3 @@
-<!-- markdownlint-disable-next-line MD033 MD041 -->
-<img src="logo.png" alt="MetricZ" align="right" width="260">
-
 # AntifreeZe Config
 
 ## Parameters
