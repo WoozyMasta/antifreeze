@@ -1,0 +1,42 @@
+[h1]AntifreeZe — DayZ server FPS booster and AI performance optimizer[/h1]
+
+[b]Up to +400% FPS in heavy zombie load scenarios![/b]
+AntifreeZe is a pure server-side DayZ mod designed to improve server performance and reduce CPU load when zombies cannot reach the player behind walls, windows, or on elevated positions.
+Real benchmarks show [b]4–6x performance gain[/b] in scenes with hundreds of active infected.
+Ideal for high-pop servers, PvE events, or large-scale horde gameplay.
+
+[hr][/hr]
+
+[b]How it works[/b]
+[list]
+[*]Optimizes infected AI logic (ZombieBase).
+[*]Freezes unreachable zombies to stop useless pathfinding.
+[*]Culls extra AI in dense local clusters.
+[*]Keeps nearby zombies fully vanilla and responsive.
+[*]No client installation required — server-side only.
+[/list]
+
+[hr][/hr]
+
+[b]Performance and optimization[/b]
+AntifreeZe significantly reduces CPU usage and stabilizes FPS under heavy AI load.
+Useful for:
+[list]
+[*]Massive PvE events.
+[*]Crowded towns and player hubs.
+[*]Horde-style or infected-rich zones.
+[*]Servers with increased AI spawn counts.
+[/list]
+The mod intelligently pauses AI that cannot reach players, avoiding wasted CPU cycles and preventing server frame drops.
+
+[hr][/hr]
+
+[b]Experimental notice[/b]
+Developed as part of issue [url=https://feedback.bistudio.com/T195642]T195642[/url].
+This is an experimental optimization layer — it may change the default zombie behavior, but provides a real and measurable performance boost.
+It does not modify damage, loot, or spawn systems.
+
+[hr][/hr]
+
+Full configuration details and source code:
+[url=https://github.com/WoozyMasta/antifreeze]github.com/WoozyMasta/antifreeze[/url]
