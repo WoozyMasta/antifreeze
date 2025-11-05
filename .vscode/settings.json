@@ -1,0 +1,22 @@
+{
+  "cSpell.words": [
+    "antifreeze",
+    "desync",
+    "cooldown"
+  ],
+  "ctagsc.ctagsPath": "tags",
+  "search.exclude": {
+    "**/.git": true,
+    "**/tags": true
+  },
+  "files.associations": {
+    "**/scripts/**/*.c": "csharp",
+    "tags": "tsv"
+  },
+  "editor.formatOnSave": true,
+  "astyle.csharp.enable": true,
+  "astyle.astylerc": "${workspaceFolder}/.astylerc",
+  "[csharp]": {
+    "editor.defaultFormatter": "chiehyu.vscode-astyle"
+  }
+}
