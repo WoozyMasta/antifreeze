@@ -17,24 +17,6 @@
 */
 modded class ZombieBase
 {
-	static int s_Antifreeze_SoundCount;
-	static float s_Antifreeze_SoundFrame;
-
-	override void OnSoundVoiceEvent(int event_id, string event_user_string)
-	{
-		float frame = GetGame().GetTickTime();
-		if (frame != s_Antifreeze_SoundFrame) {
-			s_Antifreeze_SoundFrame = frame;
-			s_Antifreeze_SoundCount = 0;
-		}
-		if (s_Antifreeze_SoundCount >= 32) // max total per frame
-			return;
-
-		s_Antifreeze_SoundCount++;
-		super.OnSoundVoiceEvent(event_id, event_user_string);
-	}
-
-	// --------- Runtime state ---------
 	protected float m_Antifreeze_AgeAccum; //!< Accumulator for frozen aging ticks
 	protected float m_Antifreeze_UnreachableTime; //!< Persistent "unreachable by height" accumulation
 	protected float m_Antifreeze_UnreachableCD; //!< Cooldown until next unfreeze probe
