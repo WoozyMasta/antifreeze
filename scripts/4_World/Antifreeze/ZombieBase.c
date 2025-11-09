@@ -187,18 +187,12 @@ modded class ZombieBase
 						}
 					}
 
-				} else {
-					// Inside the active ring: clear token to avoid monopolies
-					m_Antifreeze_ChaseHasToken = false;
-					m_Antifreeze_ChaseTokenTTL = 0.0;
-				}
+				} else
+					Antifreeze_ResetChaseToken(); // Inside the active ring: clear token to avoid monopolies
 			}
 
-		} else {
-			// Not in CHASE: ensure token cleared
-			m_Antifreeze_ChaseHasToken = false;
-			m_Antifreeze_ChaseTokenTTL = 0.0;
-		}
+		} else
+			Antifreeze_ResetChaseToken(); // Not in CHASE: ensure token cleared
 
 		// Fallthrough to native logic
 		super.CommandHandler(pDt, pCurrentCommandID, pCurrentCommandFinished);
@@ -368,6 +362,20 @@ modded class ZombieBase
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	    \brief Forcefully clear current CHASE token and reset its TTL.
+
+	    Used to ensure token rotation logic stays consistent when the zombie
+	    leaves the CHASE state, enters the active ring, or dies.
+	    Prevents "token lock" situations where inactive zombies keep
+	    holding CHASE allocation longer than allowed.
+	*/
+	protected void Antifreeze_ResetChaseToken()
+	{
+		m_Antifreeze_ChaseHasToken = false;
+		m_Antifreeze_ChaseTokenTTL = 0.0;
 	}
 }
 #endif
