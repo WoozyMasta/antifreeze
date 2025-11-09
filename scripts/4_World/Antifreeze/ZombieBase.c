@@ -45,6 +45,8 @@ modded class ZombieBase
 	protected float m_Antifreeze_StimulusGrace; //!< No-freeze window after hit/contact
 	protected float m_Antifreeze_HitWakeCD; //!< Min time between wake triggers
 	protected bool m_Antifreeze_OptOut; //!< This zombie runs vanilla if true
+	protected float m_Antifreeze_FightCD; //!< Cooldown until the next mind state drop to Chase
+	protected float m_Antifreeze_ChaseCD; //!< Cooldown until the next mind state drop to Alerted
 
 	/**
 	    \brief Constructor: initialize antifreeze state and seed per-entity jitter.
@@ -139,6 +141,8 @@ modded class ZombieBase
 			super.CommandHandler(pDt, pCurrentCommandID, pCurrentCommandFinished);
 			return;
 		}
+
+		Antifreeze_HandleMindStateDecay(pDt, ic);
 
 		// Unreachable-by-height gate
 		if (Antifreeze_Config.Get().enableFreezeUnreachableByHeight) {
@@ -368,6 +372,64 @@ modded class ZombieBase
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	    \brief Handle automatic decay of AI mind states over time without direct stimuli.
+	    \param pDt Delta time since last update.
+	    \param ic Current infected input controller.
+
+	    This method gradually downgrades AI aggression levels if the zombie remains
+	    inactive for extended periods:
+	    - FIGHT → CHASE after decayMindStateFightCooldown seconds without hits or targets.
+	    - CHASE → ALERTED after decayMindStateChaseCooldown seconds of inactivity.
+
+	    Timers reset whenever the zombie changes to any other mind state.
+	    Controlled by Antifreeze_Config.enableDecayMindState.
+	*/
+	protected void Antifreeze_HandleMindStateDecay(float pDt, DayZInfectedInputController ic)
+	{
+		if (!Antifreeze_Config.Get().enableDecayMindState)
+			return;
+
+		int mindState = ic.GetMindState();
+		DayZInfectedCommandMove moveCommand = GetCommand_Move();
+
+		// Decay FIGHT → CHASE after N seconds without hit/target
+		if (mindState == DayZInfectedConstants.MINDSTATE_FIGHT) {
+			m_Antifreeze_FightCD += pDt;
+
+			if (m_Antifreeze_FightCD >= Antifreeze_Config.Get().decayMindStateFightCooldown) {
+				m_MindState = DayZInfectedConstants.MINDSTATE_CHASE;
+				m_LastMindState = m_MindState;
+				m_AttackCooldownTime = 0.0;
+
+				if (moveCommand /* && !moveCommand.IsTurning() */)
+					moveCommand.SetIdleState(2);
+
+				m_Antifreeze_FightCD = 0;
+				SetSynchDirty();
+			}
+		} else
+			m_Antifreeze_FightCD = 0;
+
+		// Decay CHASE → ALERTED after N seconds of inactivity
+		if (mindState == DayZInfectedConstants.MINDSTATE_CHASE) {
+			m_Antifreeze_ChaseCD += pDt;
+
+			if (m_Antifreeze_ChaseCD >= Antifreeze_Config.Get().decayMindStateChaseCooldown) {
+				m_MindState = DayZInfectedConstants.MINDSTATE_ALERTED;
+				m_LastMindState = m_MindState;
+				m_AttackCooldownTime = 0.0;
+
+				if (moveCommand /* && !moveCommand.IsTurning() */)
+					moveCommand.SetIdleState(1);
+
+				m_Antifreeze_ChaseCD = 0;
+				SetSynchDirty();
+			}
+		} else
+			m_Antifreeze_ChaseCD = 0;
 	}
 }
 #endif

@@ -12,7 +12,7 @@ class Antifreeze_Config
 {
 	// * Const
 	protected static const string CONFIG_FILE = "$profile:antifreeze.json";
-	protected static const int CONFIG_VERSION = 1;
+	protected static const int CONFIG_VERSION = 2;
 
 	// * Singleton
 	ref protected static Antifreeze_Config s_Instance;
@@ -26,6 +26,7 @@ class Antifreeze_Config
 	bool enableRandomJitter = true; //!< Add jitter to probe/TTL timings to avoid spikes
 	bool enableCheapAttackProbe = false; //!< Use single CanAttackToPosition probe as cheap reachability check
 	bool enableFrozenAgingTicks = true; //!< While frozen, forward rare super() ticks to age native timers
+	bool enableDecayMindState = true; //!< Allow force decay mind states by timers
 	bool enableRandomPerZombieOptOut = false; //!< Some zombies run pure vanilla logic
 	bool enableForceCleanupBodies = true; //!< Allow delete dead zombie bodies near player
 	bool enableHotConfigReload = false; //!< Allow to use afzr command for reload config
@@ -40,6 +41,10 @@ class Antifreeze_Config
 	// * Frozen aging
 	float frozenAgingTickInterval = 0.75; //!< Seconds between aging ticks while frozen
 	float frozenAgingTickDtCap = 0.06; //!< Max dt forwarded into a single aging tick
+
+	// * Mind state decay
+	float decayMindStateFightCooldown = 30.0; //!< Seconds until the Fight mind state drop to Chase
+	float decayMindStateChaseCooldown = 120.0; //!< Seconds until the Chase mind state drop to Alerted
 
 	// * Spatial thresholds
 	float unreachableHeightDeltaMeters = 1.25; //!< If target is this much higher and near -> treat as unreachable
