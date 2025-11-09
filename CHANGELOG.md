@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning][].
 ### Removed
 -->
 
+## [0.1.2][] - 2025-11-09
+
+### Added
+
+* docs to workshop content
+* license file to pbo
+
+[0.1.2]: https://github.com/WoozyMasta/antifreeze/compare/0.1.1...0.1.2
+
 ## [0.1.1][] - 2025-11-09
 
 ### Changed
