@@ -228,7 +228,7 @@
 * `cleanupBodiesTTL` (int)
   * **Назначение**: переопределение глобальной опции `CleanupLifetimeDeadInfected`.
   * **По умолчанию**: равно `CleanupLifetimeDeadInfected`
-  * **Диапазон**: 0..`CleanupLifetimeDeadInfected`
+  * **Диапазон**: 5..`CleanupLifetimeDeadInfected`
 
 * `version` (int, не редактируй)
   * **Назначение**: версия структуры файла. Мод обновляет сам, менять не нужно.

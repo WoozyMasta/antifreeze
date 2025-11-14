@@ -229,7 +229,7 @@
 * `cleanupBodiesTTL` (int)
   * **Purpose**: Overrides the global `CleanupLifetimeDeadInfected` option.
   * **Default**: equal to `CleanupLifetimeDeadInfected`
-  * **Range**: 0..`CleanupLifetimeDeadInfected`
+  * **Range**: 5..`CleanupLifetimeDeadInfected`
 
 * `version` (int, do not edit)
   * **Purpose**: config schema version; managed by the mod.

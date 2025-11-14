@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning][].
 ### Removed
 -->
 
+## [0.1.3][] - 2025-11-14
+
+### Changed
+
+* fixed regression where `cleanupBodiesTTL` could end up as `0` after
+  updating from older configs, preventing dead infected cleanup
+* preserved user-defined `cleanupBodiesTTL` on config schema upgrade
+  (no longer overwritten with CE value)
+* added sane fallback for `CleanupLifetimeDeadInfected` when CE global
+  returns invalid or zero value
+
+[0.1.3]: https://github.com/WoozyMasta/antifreeze/compare/0.1.2...0.1.3
+
 ## [0.1.2][] - 2025-11-09
 
 ### Added

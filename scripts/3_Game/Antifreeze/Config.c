@@ -12,7 +12,8 @@ class Antifreeze_Config
 {
 	// * Const
 	protected static const string CONFIG_FILE = "$profile:antifreeze.json";
-	protected static const int CONFIG_VERSION = 1;
+	protected static const int CONFIG_VERSION = 2;
+	protected static const int DEFAULT_CLEANUP_LIFETIME_DEAD_INFECTED = 330;
 
 	// * Singleton
 	ref protected static Antifreeze_Config s_Instance;
@@ -103,7 +104,10 @@ class Antifreeze_Config
 	*/
 	protected void Load()
 	{
+		// load default infected bodies cleanup lifetime
 		ceMaxTTL = GetCEApi().GetCEGlobalInt("CleanupLifetimeDeadInfected");
+		if (ceMaxTTL < 1)
+			ceMaxTTL = DEFAULT_CLEANUP_LIFETIME_DEAD_INFECTED;
 
 		string error;
 
@@ -115,17 +119,26 @@ class Antifreeze_Config
 			}
 
 			Normalize();
+
+			if (version != CONFIG_VERSION) {
+				version = CONFIG_VERSION;
+
+				if (!JsonFileLoader<Antifreeze_Config>.SaveFile(CONFIG_FILE, this, error)) {
+					ErrorEx(error);
+					return;
+				}
+
+				ErrorEx("Saved upgraded AntifreeZe config file: " + CONFIG_FILE, ErrorExSeverity.INFO);
+			}
+
 			SetLoaded();
-
-			if (version == CONFIG_VERSION)
-				return;
-
-			// bump version if config structure changed
-			version = CONFIG_VERSION;
+			return;
 		}
 
 		// Write initial or upgraded config
+		version = CONFIG_VERSION;
 		cleanupBodiesTTL = ceMaxTTL;
+
 		if (!JsonFileLoader<Antifreeze_Config>.SaveFile(CONFIG_FILE, this, error)) {
 			ErrorEx(error);
 			return;
@@ -183,10 +196,10 @@ class Antifreeze_Config
 		randomOptOutRatio = Math.Clamp(randomOptOutRatio, 0.0, 0.9);
 
 		// Bodies cleanup
-		if (cleanupBodiesTTL < 0)
+		if (cleanupBodiesTTL < 1)
 			cleanupBodiesTTL = ceMaxTTL;
 		else
-			cleanupBodiesTTL = Math.Clamp(cleanupBodiesTTL, 0, ceMaxTTL);
+			cleanupBodiesTTL = Math.Clamp(cleanupBodiesTTL, Math.Min(5, ceMaxTTL), ceMaxTTL);
 	}
 
 	/**
